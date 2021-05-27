@@ -18,7 +18,7 @@ use CL\Slack\Test\Model\ModelTrait;
 /**
  * @author Cas Leentfaar <info@casleentfaar.com>
  */
-abstract class AbstractSearchPayloadResponseTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractSearchPayloadResponseTest extends \PHPUnit\Framework\TestCase
 {
     use ModelTrait;
 
@@ -27,7 +27,7 @@ abstract class AbstractSearchPayloadResponseTest extends \PHPUnit_Framework_Test
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializer = new PayloadResponseSerializer();
     }
@@ -50,7 +50,7 @@ abstract class AbstractSearchPayloadResponseTest extends \PHPUnit_Framework_Test
         $this->assertEquals($responseData['ok'], $actualPayloadResponse->isOk());
         if (array_key_exists('error', $responseData)) {
             $this->assertEquals($responseData['error'], $actualPayloadResponse->getError());
-            $this->assertInternalType('string', $actualPayloadResponse->getErrorExplanation());
+            $this->assertIsString($actualPayloadResponse->getErrorExplanation());
         }
         $this->assertResponse($responseData, $actualPayloadResponse);
     }

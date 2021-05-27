@@ -2,3 +2,7 @@
 /composer.lock
 /bin/*
 /vendor/*
+
+# DMC
+.idea
+.phpunit.result.cache

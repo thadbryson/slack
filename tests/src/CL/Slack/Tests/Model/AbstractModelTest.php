@@ -19,7 +19,7 @@ use JMS\Serializer\SerializerBuilder;
 /**
  * @author Cas Leentfaar <info@casleentfaar.com>
  */
-abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractModelTest extends \PHPUnit\Framework\TestCase
 {
     use ModelTrait;
 
@@ -31,7 +31,7 @@ abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $metaDir = __DIR__ . '/../../../../../../src/CL/Slack/Resources/config/serializer';
         $this->serializer = SerializerBuilder::create()->addMetadataDir($metaDir)->build();
