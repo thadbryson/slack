@@ -26,26 +26,26 @@ use Mockery as Mock;
 /**
  * @author Cas Leentfaar <info@casleentfaar.com>
  */
-class ApiClientTest extends \PHPUnit\Framework\TestCase
+class ApiClientTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @test
      */
     public function it_can_send_a_payload()
     {
-        $self = $this;
+        $self  = $this;
         $token = 'fake-token';
 
-        $mockRequestData = ['fruit' => 'apple', 'token' => $token];
+        $mockRequestData  = ['fruit' => 'apple', 'token' => $token];
         $mockResponseData = ['ok' => true, 'fruit' => 'apple'];
 
-        $handler = HandlerStack::create(
+        $handler          = HandlerStack::create(
             new MockHandler([
                 new Response(200, [], json_encode($mockResponseData)),
             ])
         );
         $historyContainer = [];
-        $history = Middleware::history($historyContainer);
+        $history          = Middleware::history($historyContainer);
         $handler->push($history);
         $apiClient = new ApiClient(
             $token,
@@ -62,13 +62,13 @@ class ApiClientTest extends \PHPUnit\Framework\TestCase
             $self->assertEquals($mockResponseData, $event->getRawPayloadResponse());
         });
 
-        $payload = new PayloadMock();
+        $payload = new PayloadMock;
         $payload->setFruit($mockRequestData['fruit']);
 
         $apiClient->send($payload);
 
-        $transaction = $historyContainer[0];
-        $requestUrl = (string) $transaction['request']->getUri();
+        $transaction        = $historyContainer[0];
+        $requestUrl         = (string) $transaction['request']->getUri();
         $requestContentType = $transaction['request']->getHeader('content-type')[0];
         parse_str($transaction['request']->getBody(), $requestBody);
         $responseBody = json_decode($transaction['response']->getBody(), true);
@@ -84,16 +84,16 @@ class ApiClientTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \CL\Slack\Exception\SlackException
-     * @expectedExceptionMessage You must supply a token to send a payload, since you did not provide one during construction
      */
     public function it_can_not_send_a_payload_without_a_token()
     {
+        $this->expectException(\CL\Slack\Exception\SlackException::class);
+        $this->expectExceptionMessage('You must supply a token to send a payload, since you did not provide one during construction');
+
         /* @var PayloadInterface|Mock\MockInterface $mockPayload */
         $mockPayload = Mock::mock(PayloadInterface::class);
 
-        $apiClient = new ApiClient();
+        $apiClient = new ApiClient;
         $apiClient->send($mockPayload);
     }
 }
