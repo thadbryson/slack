@@ -13,11 +13,12 @@ namespace CL\Slack\Tests\Transport\Events;
 
 use CL\Slack\Test\Model\ModelTrait;
 use CL\Slack\Transport\Events\RequestEvent;
+use Mockery;
 
 /**
  * @author Cas Leentfaar <info@casleentfaar.com>
  */
-class RequestEventTest extends \PHPUnit_Framework_TestCase
+class RequestEventTest extends \PHPUnit\Framework\TestCase
 {
     use ModelTrait;
 
@@ -31,5 +32,7 @@ class RequestEventTest extends \PHPUnit_Framework_TestCase
         $actualPayload = $event->getRawPayload();
 
         $this->assertEquals($expectedPayload, $actualPayload);
+
+        Mockery::close();
     }
 }
